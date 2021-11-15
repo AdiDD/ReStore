@@ -1,24 +1,32 @@
-import { useState, useEffect } from "react";
-import { Product } from "../models/product";
-import { Typography } from "@mui/material";
+import { useState } from "react";
+import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
 import Catalog from "../../features/catalog/Catalog";
+import Header from "./Header";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [darkMode, setDarkMode] = useState(false);
+  const paletteType = darkMode ? 'dark' : 'light';
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/products")
-    .then(response => response.json())
-    .then(data => setProducts(data));
-  }, [])
+  const theme = createTheme({
+    palette: {
+      mode: paletteType,
+      background: {
+        default: darkMode ? "#121212" : "#eaeaea"
+      }
+    }
+  });
 
+  const handleThemeChange = () => setDarkMode(!darkMode);
 
   return (
-      <div>
-        <Typography variant="h1">Re-Store</Typography> 
-        <Catalog products={products} />
-      </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+        <Container>
+          <Catalog />
+        </Container>
+      </ThemeProvider>
   );
 }
 
