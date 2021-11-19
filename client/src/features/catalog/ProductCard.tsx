@@ -14,7 +14,6 @@ interface Props {
 }
 
 const ProductCard = ({product}: Props) => {
-    const cardUrl = `http://picsum.photos/${Math.floor(Math.random()*200)}`;
     return (
         <Card>
           <CardHeader 
