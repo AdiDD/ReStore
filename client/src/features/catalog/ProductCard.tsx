@@ -30,7 +30,7 @@ const ProductCard = ({product}: Props) => {
           />  
           <CardMedia
             sx={{height: 140, backgroundSize: "contain"}}
-            image={cardUrl}
+            image={product.pictureUrl}
             title={product.name}
           />
           <CardContent>
