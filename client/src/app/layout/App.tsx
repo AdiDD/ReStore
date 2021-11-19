@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Route } from "react-router-dom";
 import { Routes } from "react-router";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Header from "./Header";
 import HomePage from "../../features/home/HomePage";
@@ -27,6 +29,7 @@ function App() {
 
   return (
       <ThemeProvider theme={theme}>
+        <ToastContainer theme="colored" position="bottom-right" />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
         <Container>
