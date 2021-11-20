@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Route } from "react-router-dom";
-import { Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
