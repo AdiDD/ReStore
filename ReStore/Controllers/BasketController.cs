@@ -63,7 +63,13 @@ namespace ReStore.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
         {
-            throw new NotImplementedException();
+            var basket = await RetriveBasket();
+            if (basket == null) return NotFound();
+            basket.RemoveItem(productId, quantity);
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result) return Ok();
+            return BadRequest(new ProblemDetails { Title = "Problem removing the item from the basket" });
         }
 
         private async Task<Basket> RetriveBasket()
