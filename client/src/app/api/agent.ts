@@ -8,29 +8,8 @@ const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.response.use(response => {
     return response;
 }, (error: AxiosError) => {
-    const {data, status} = error.response!;
-    switch (status) {
-        case 400:
-            if (data.errors) {
-                const modelStateErrors: string[] = [];
-                for (const key in data.errors) {
-                    modelStateErrors.push(data.errors[key]);
-                }
-
-                throw modelStateErrors.flat();
-            }
-            
-            toast.error(data.title);
-            break;
-        case 401:
-            toast.error(data.title);
-            break;
-        case 500:
-            toast.error(data.title);
-            break;
-        default:
-            break;
-    }
+    const {data} = error.response!;
+    toast.error(data.title);
 
     return Promise.reject(error.response);
 });
