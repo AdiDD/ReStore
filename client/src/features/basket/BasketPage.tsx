@@ -37,7 +37,7 @@ const BasketPage = () => {
             .finally(() => setStatus({ loading: false, name: '' }));
     }
 
-    if (!basket) return <Typography variant="h3">Your basket is empty</Typography> 
+    if (basket?.items.length === 0) return <Typography variant="h3">Your basket is empty</Typography> 
 
     return (
         <TableContainer component={Paper}>
@@ -52,7 +52,7 @@ const BasketPage = () => {
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                {basket.items.map(item => (
+                {basket?.items.map(item => (
                     <TableRow
                     key={item.productId}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
