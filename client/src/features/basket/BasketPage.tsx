@@ -14,7 +14,7 @@ import { useStoreContext } from "../../app/context/StoreContext";
 const BasketPage = () => {
     const { basket } = useStoreContext();
 
-    if (!basket?.items) return <Typography variant="h3">Your basket is empty</Typography> 
+    if (!basket) return <Typography variant="h3">Your basket is empty</Typography> 
 
     return (
         <TableContainer component={Paper}>
