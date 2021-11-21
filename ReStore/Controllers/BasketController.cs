@@ -25,7 +25,7 @@ namespace ReStore.Controllers
         {
             var basket = await RetriveBasket();
 
-            if (basket == null) return NotFound();
+            if (basket == null) basket = CreateBasket();
 
             return MapBasketToDto(basket); 
         }
