@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
@@ -11,10 +11,26 @@ import ProductDetails from "../../features/catalog/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
 import BasketPage from "../../features/basket/BasketPage";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import { useStoreContext } from "../context/StoreContext";
+import { getCookie } from "../util/util";
+import agent from "../api/agent";
 
 function App() {
+  const {setBasket} = useStoreContext();
+  const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
+
+  useEffect(() => {
+    const buyerId = getCookie("buyerId");
+    if (buyerId) {
+      agent.Basket.get()
+        .then(basket => setBasket(basket))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false));
+    }
+  }, [setBasket]);
 
   const theme = createTheme({
     palette: {
@@ -26,6 +42,8 @@ function App() {
   });
 
   const handleThemeChange = () => setDarkMode(!darkMode);
+
+  if (loading) return <LoadingComponent message="Initialising app..." />
 
   return (
       <ThemeProvider theme={theme}>
