@@ -31,16 +31,16 @@ namespace ReStore.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quatity)
+        public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
         {
             var basket = await RetriveBasket();
             if (basket == null) basket = CreateBasket();
             var product = await _context.Products.FindAsync(productId);
             if (product == null) return NotFound();
-            basket.AddItem(product, quatity);
+            basket.AddItem(product, quantity);
 
             var result = await _context.SaveChangesAsync() > 0;
-            if (result) return CreatedAtRoute("GetBasket", basket);
+            if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket));
 
             return BadRequest(new ProblemDetails { Title = "Problem saving item to basket" });
         }
