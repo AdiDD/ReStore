@@ -83,9 +83,13 @@ const BasketPage = () => {
                     </TableCell>
                     <TableCell align="right">${(item.price * item.quantity / 100).toFixed(2)}</TableCell>
                     <TableCell align="right">
-                        <IconButton color="error">
+                        <LoadingButton
+                            loading={status.loading && status.name === "del" + item.productId}
+                            onClick={() => handleRemoveItem(item.productId, "del" + item.productId, item.quantity)}
+                            color="error"
+                        >
                             <Delete />
-                        </IconButton>
+                        </LoadingButton>
                     </TableCell>
                     </TableRow>
                 ))}
