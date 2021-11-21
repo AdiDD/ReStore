@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Delete } from "@mui/icons-material";
+import { Box } from "@mui/system";
 
 import { useStoreContext } from "../../app/context/StoreContext";
 
@@ -35,7 +36,10 @@ const BasketPage = () => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                     <TableCell component="th" scope="row">
-                        {item.name}
+                        <Box display="flex" alignItems="center">
+                            <img src={item.pictureUrl} alt={item.name} style={{height: 50, marginRight: 20}} />
+                            <span>{item.name}</span>
+                        </Box>
                     </TableCell>
                     <TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
                     <TableCell align="right">{item.quantity}</TableCell>
