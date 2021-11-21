@@ -3,6 +3,7 @@ import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import { NavLink } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
+import { useStoreContext } from "../context/StoreContext";
 
 interface Props {
     darkMode: boolean;
@@ -33,6 +34,9 @@ const navStyles = {
 };
 
 const Header = ({ darkMode, handleThemeChange } : Props) => {
+    const { basket } = useStoreContext();
+    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
     return (
         <AppBar position="static" sx={{mb: 8}}>
             <Toolbar sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
@@ -56,7 +60,7 @@ const Header = ({ darkMode, handleThemeChange } : Props) => {
 
                 <Box display="flex" alignItems="center">
                     <IconButton component={Link} to="/basket" size="large" sx={{color: "inherit"}}>
-                        <Badge badgeContent={4} color="secondary">
+                        <Badge badgeContent={itemCount} color="secondary">
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
