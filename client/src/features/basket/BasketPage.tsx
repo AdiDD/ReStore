@@ -7,13 +7,35 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Delete } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
 import { useStoreContext } from "../../app/context/StoreContext";
+import agent from "../../app/api/agent";
+import { LoadingButton } from "@mui/lab";
 
 const BasketPage = () => {
-    const { basket } = useStoreContext();
+    const { basket, setBasket, removeItem } = useStoreContext();
+    const [status, setStatus] = useState({
+        loading: false,
+        name: ''
+    });
+
+    const handleAddItem = (productId: number, name: string) => {
+        setStatus({ loading: true, name });
+        agent.Basket.addItem(productId)
+            .then(basket => setBasket(basket))
+            .catch(error => console.log(error))
+            .finally(() => setStatus({ loading: false, name: '' }));
+    }
+
+    const handleRemoveItem = (productId: number, name: string, quantity = 1) => {
+        setStatus({ loading: true, name });
+        agent.Basket.removeItem(productId, quantity)
+            .then(() => removeItem(productId, quantity))
+            .catch(error => console.log(error))
+            .finally(() => setStatus({ loading: false, name: '' }));
+    }
 
     if (!basket) return <Typography variant="h3">Your basket is empty</Typography> 
 
@@ -24,7 +46,7 @@ const BasketPage = () => {
                 <TableRow>
                     <TableCell>Product</TableCell>
                     <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
                     <TableCell align="right">Subtotal</TableCell>
                     <TableCell align="right"></TableCell>
                 </TableRow>
@@ -42,7 +64,23 @@ const BasketPage = () => {
                         </Box>
                     </TableCell>
                     <TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
-                    <TableCell align="right">{item.quantity}</TableCell>
+                    <TableCell align="center">
+                        <LoadingButton
+                            loading={status.loading && status.name === "remove" + item.productId}
+                            onClick={() => handleRemoveItem(item.productId, "remove" + item.productId)}
+                            color="error"
+                        >
+                            <Remove />
+                        </LoadingButton>
+                        {item.quantity}
+                        <LoadingButton 
+                            loading={status.loading && status.name === "add" + item.productId}
+                            onClick={() => handleAddItem(item.productId, "add" + item.productId)}
+                            color="success"
+                        >
+                            <Add />
+                        </LoadingButton>
+                    </TableCell>
                     <TableCell align="right">${(item.price * item.quantity / 100).toFixed(2)}</TableCell>
                     <TableCell align="right">
                         <IconButton color="error">
