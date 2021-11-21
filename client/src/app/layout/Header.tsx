@@ -2,6 +2,7 @@ import { AppBar, Badge, IconButton, List, ListItem, Switch, Toolbar, Typography 
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import { NavLink } from "react-router-dom";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 
 interface Props {
     darkMode: boolean;
@@ -54,7 +55,7 @@ const Header = ({ darkMode, handleThemeChange } : Props) => {
                 </List>
 
                 <Box display="flex" alignItems="center">
-                    <IconButton size="large" sx={{color: "inherit"}}>
+                    <IconButton component={Link} to="/basket" size="large" sx={{color: "inherit"}}>
                         <Badge badgeContent={4} color="secondary">
                             <ShoppingCart />
                         </Badge>

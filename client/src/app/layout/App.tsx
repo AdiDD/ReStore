@@ -10,6 +10,7 @@ import Catalog from "../../features/catalog/Catalog";
 import ProductDetails from "../../features/catalog/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
+import BasketPage from "../../features/basket/BasketPage";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -38,6 +39,7 @@ function App() {
             <Route path="/catalog/:id" element={<ProductDetails />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/basket" element={<BasketPage />} />
           </Routes>
         </Container>
       </ThemeProvider>
