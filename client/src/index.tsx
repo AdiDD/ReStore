@@ -7,12 +7,16 @@ import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 
 import './app/layout/styles.css';
+import { Provider } from 'react-redux';
+import { store } from './app/store/configureStore';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <StoreProvider>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </StoreProvider>
     </BrowserRouter>
   </React.StrictMode>,
