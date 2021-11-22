@@ -46,6 +46,12 @@ export default function ProductDetails() {
         }
     }
 
+    const displayCartMessage = () => {
+        if (!item) return "Add to cart"
+        else if (item && quantity === 0) return "Remove item from cart"
+        else return "Update quantity"
+    }
+
     if (loading) return <LoadingComponent message="Loading product" />
 
     if (!product) return <h3>Product not found</h3>
@@ -102,12 +108,13 @@ export default function ProductDetails() {
                             loading={submitting}
                             onClick={handleUpdateCart}
                             sx={{height: "55px"}}
-                            color="primary"
+                            color={item && quantity === 0 ? "error" : "primary"}
                             size="large"
                             variant="contained"
                             fullWidth
                         >
-                            {item ? "Update quantity" : "Add to Cart"}
+                            {/* {item ? "Update quantity" : "Add to Cart"} */}
+                            {displayCartMessage()}
                         </LoadingButton>
                     </Grid>
                 </Grid>
