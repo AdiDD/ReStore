@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +15,7 @@ import { useStoreContext } from "../../app/context/StoreContext";
 import agent from "../../app/api/agent";
 import BasketSummary from "./BasketSummary";
 import { currencyFormat } from "../../app/util/util";
+import { Link } from "react-router-dom";
 
 
 const BasketPage = () => {
@@ -104,6 +105,15 @@ const BasketPage = () => {
                 <Grid item xs={6} />
                 <Grid item xs={6}>
                     <BasketSummary />
+                    <Button
+                        component={Link}
+                        to="/checkout"
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                    >
+                        Checkout
+                    </Button>
                 </Grid>
             </Grid>
         </>
