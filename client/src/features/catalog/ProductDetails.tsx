@@ -4,7 +4,7 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { addBasketItemAsync, removeBasketItemAsync, setBasket } from "../basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 import { fetchProductAsync, productSelectors } from "./catalogSlice";
 
 export default function ProductDetails() {
