@@ -35,8 +35,10 @@ namespace ReStore.Controllers
         {
             var basket = await RetriveBasket();
             if (basket == null) basket = CreateBasket();
+
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails { Title = "Product not found" });
+
             basket.AddItem(product, quantity);
 
             var result = await _context.SaveChangesAsync() > 0;
