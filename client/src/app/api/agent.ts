@@ -26,7 +26,8 @@ const requests = {
 };
 
 const Catalog = {
-    list: () => requests.get('products'),
+    list: () => requests.get("products"),
+    fetchFilters: () => requests.get("products/filters"),
     details: (id: number) => requests.get(`products/${id}`)
 };
 
