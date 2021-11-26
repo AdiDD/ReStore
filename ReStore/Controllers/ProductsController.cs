@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ReStore.Data;
 using ReStore.Entities;
+using ReStore.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,9 +19,13 @@ namespace ReStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
         {
-            return await _context.Products.ToListAsync();
+            var query = _context.Products
+                .Sort(orderBy)
+                .AsQueryable();
+
+            return await query.ToListAsync();
         }
 
         [HttpGet("{id}")]
