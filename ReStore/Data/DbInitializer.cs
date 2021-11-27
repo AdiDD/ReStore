@@ -29,8 +29,8 @@ namespace ReStore.Data
                     Email = "admin@admin.com"
                 };
 
-                await userManager.CreateAsync(user, "admin@admin.com");
-                await userManager.AddToRolesAsync(user, new[] { "Member", "Admin" });
+                await userManager.CreateAsync(admin, "admin@admin.com");
+                await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
             }
 
 
