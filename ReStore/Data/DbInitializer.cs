@@ -1,4 +1,5 @@
-﻿using ReStore.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using ReStore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,31 @@ namespace ReStore.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(StoreContext context)
+        public static async Task Initialize(StoreContext context, UserManager<User> userManager)
         {
+
+            if (!userManager.Users.Any())
+            {
+                var user = new User
+                {
+                    UserName = "member",
+                    Email = "member@member.com"
+                };
+
+                await userManager.CreateAsync(user, "member@member.com");
+                await userManager.AddToRoleAsync(user, "Member");
+
+                var admin = new User
+                {
+                    UserName = "admin",
+                    Email = "admin@admin.com"
+                };
+
+                await userManager.CreateAsync(user, "admin@admin.com");
+                await userManager.AddToRolesAsync(user, new[] { "Member", "Admin" });
+            }
+
+
             if (context.Products.Any()) return;
 
             var products = new List<Product> 
