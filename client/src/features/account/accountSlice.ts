@@ -36,10 +36,16 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     }
 );
 
-export const AccountSlice = createSlice({
+export const accountSlice = createSlice({
     name: "account",
     initialState,
-    reducers: {},
+    reducers: {
+        signOut: state => {
+            state.user = null;
+            localStorage.removeItem("user");
+            window.location.href = "http://localhost:3000/";
+        }
+    },
     extraReducers: builder => {
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
             state.user = action.payload;
@@ -49,3 +55,5 @@ export const AccountSlice = createSlice({
         });
     }
 });
+
+export const { signOut } = accountSlice.actions;
