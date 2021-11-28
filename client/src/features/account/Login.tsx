@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from "react";
+import { useNavigate } from 'react-router';
 
 import Paper from "@mui/material/Paper";
 import Avatar from '@mui/material/Avatar';
@@ -11,17 +12,25 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import agent from "../../app/api/agent";
+import { useAppDispatch } from '../../app/store/configureStore';
+import { signInUser } from './accountSlice';
+import { LoadingButton } from '@mui/lab';
 
 const Login = () => {
   const [values, setValues] = useState({
       username: "",
       password: ""
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();  
-    await agent.Account.login(values);
+    setLoading(true);
+    await dispatch(signInUser(values));
+    setLoading(false);
+    navigate("/catalog");
   };
 
   const handleInputChange = (event: any) => {
@@ -61,14 +70,15 @@ const Login = () => {
                 onChange={handleInputChange}
                 value={values.password}
                 />
-                <Button
+                <LoadingButton
+                loading={loading}
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 >
                 Sign In
-                </Button>
+                </LoadingButton>
                 <Grid container>
                 <Grid item>
                     <Link to="/register" >
