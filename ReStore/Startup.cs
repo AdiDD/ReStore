@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using ReStore.Data;
 using ReStore.Entities;
 using ReStore.Middleware;
+using ReStore.Services;
 
 namespace ReStore
 {
@@ -50,6 +51,8 @@ namespace ReStore
 
             services.AddAuthentication();
             services.AddAuthorization();
+
+            services.AddScoped<TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
