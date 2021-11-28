@@ -4,19 +4,22 @@ import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/materia
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useAppDispatch } from "../store/configureStore";
+import { setBasket } from "../../features/basket/basketSlice";
+import { getCookie } from "../util/util";
+import agent from "../api/agent";
+
 import Header from "./Header";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import HomePage from "../../features/home/HomePage";
 import Catalog from "../../features/catalog/Catalog";
 import ProductDetails from "../../features/catalog/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
 import BasketPage from "../../features/basket/BasketPage";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { getCookie } from "../util/util";
-import agent from "../api/agent";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
-import { useAppDispatch } from "../store/configureStore";
-import { setBasket } from "../../features/basket/basketSlice";
+import Login from "../../features/account/Login";
+import Register from "../../features/account/Register";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -63,6 +66,8 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/basket" element={<BasketPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </Container>
       </ThemeProvider>
