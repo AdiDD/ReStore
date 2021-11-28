@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReStore.DTOs;
 using ReStore.Entities;
+using ReStore.Services;
 using System.Threading.Tasks;
 
 namespace ReStore.Controllers
@@ -9,20 +10,26 @@ namespace ReStore.Controllers
     public class AccountController : BaseApiController
     {
         private readonly UserManager<User> _userManager;
+        private readonly TokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager)
+        public AccountController(UserManager<User> userManager, TokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
 
-            return user;
+            return new UserDto
+            {
+                Email = user.Email,
+                Token = await _tokenService.GenerateToken(user)
+            };
         }
 
         [HttpPost("register")]
