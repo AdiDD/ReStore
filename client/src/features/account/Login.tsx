@@ -30,7 +30,6 @@ const Login = () => {
     setLoading(true);
     await dispatch(signInUser(values));
     setLoading(false);
-    navigate("/catalog");
   };
 
   const handleInputChange = (event: any) => {

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
@@ -57,7 +57,7 @@ export const accountSlice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(signInUser.rejected, (state, action) => {
+        builder.addCase(signInUser.rejected, (_, action) => {
             console.log(action.error);
         });
         builder.addCase(fetchCurrentUser.rejected, state => {
@@ -66,7 +66,11 @@ export const accountSlice = createSlice({
             window.location.href = "http://localhost:3000/login";
             toast.error("Session expired. Please log in again");
         });
-        builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
+        builder.addCase(signInUser.fulfilled, (state, action) => {
+            state.user = action.payload;
+            window.location.href = "http://localhost:3000/catalog";
+        });
+        builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
             state.user = action.payload;
         });
     }
