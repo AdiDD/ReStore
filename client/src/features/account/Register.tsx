@@ -81,7 +81,6 @@ const Register = () => {
                 fullWidth
                 label="Username"
                 name="username"
-                autoComplete="username"
                 autoFocus
                 onChange={handleInputChange}
                 value={values.username}
@@ -95,7 +94,6 @@ const Register = () => {
                 fullWidth
                 label="Email address"
                 name="email"
-                autoComplete="email"
                 onChange={handleInputChange}
                 value={values.email}
                 error={emailErrors.length > 0}
@@ -108,7 +106,6 @@ const Register = () => {
                 name="password"
                 label="Password"
                 type="password"
-                autoComplete="current-password"
                 onChange={handleInputChange}
                 value={values.password}
                 error={passwordErrors.length > 0}
