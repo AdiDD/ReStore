@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
+import { setBasket } from "../basket/basketSlice";
 
 interface AccountState {
     user: User | null;
@@ -11,11 +12,13 @@ const initialState: AccountState = {
     user: null
 }
 
-export const signInUser = createAsyncThunk<User, {username: string, password: string}>(
+export const signInUser = createAsyncThunk<User, any>(
     "account/signInUser",
-    async (data, thunkAPI) => {
+    async (userDto, thunkAPI) => {
         try {
-            const user = await agent.Account.login(data);
+            // const userDto = await agent.Account.login(data);
+            const { basket, ...user } = userDto;
+            if (basket) thunkAPI.dispatch(setBasket(basket));
             localStorage.setItem("user", JSON.stringify(user));
             return user;
         } catch (error: any) {
@@ -29,7 +32,9 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     async (_, thunkAPI) => {
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
         try {
-            const user = await agent.Account.currentUser();
+            const userDto = await agent.Account.currentUser();
+            const { basket, ...user } = userDto;
+            if (basket) thunkAPI.dispatch(setBasket(basket));
             localStorage.setItem("user", JSON.stringify(user));
             return user; 
         } catch (error: any) {
@@ -68,7 +73,6 @@ export const accountSlice = createSlice({
         });
         builder.addCase(signInUser.fulfilled, (state, action) => {
             state.user = action.payload;
-            window.location.href = "http://localhost:3000/catalog";
         });
         builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
             state.user = action.payload;

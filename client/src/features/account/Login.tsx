@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 
 import Paper from "@mui/material/Paper";
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,6 +14,7 @@ import Container from '@mui/material/Container';
 import { useAppDispatch } from '../../app/store/configureStore';
 import { signInUser } from './accountSlice';
 import { LoadingButton } from '@mui/lab';
+import agent from '../../app/api/agent';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -28,8 +28,13 @@ const Login = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();  
     setLoading(true);
-    await dispatch(signInUser(values));
-    setLoading(false);
+    agent.Account.login(values)
+      .then(data => {
+        dispatch(signInUser(data));
+        navigate("/catalog");
+      })
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false));
   };
 
   const handleInputChange = (event: any) => {
