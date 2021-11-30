@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ReStore.Data;
 using ReStore.DTOs;
 using ReStore.Entities;
+using ReStore.Extensions;
 using ReStore.Services;
 using System.Threading.Tasks;
 
@@ -12,11 +15,13 @@ namespace ReStore.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
+        private readonly StoreContext _context;
 
-        public AccountController(UserManager<User> userManager, TokenService tokenService)
+        public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -26,10 +31,22 @@ namespace ReStore.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
 
+            var userBasket = await RetriveBasket(loginDto.Username);
+            var anonymusBasket = await RetriveBasket(Request.Cookies["buyerId"]);
+
+            if (anonymusBasket != null)
+            {
+                if (userBasket != null) _context.Baskets.Remove(userBasket);
+                anonymusBasket.BuyerId = user.UserName;
+                Response.Cookies.Delete("buyerId");
+                await _context.SaveChangesAsync();
+            }
+
             return new UserDto
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Basket = anonymusBasket != null ? anonymusBasket.MapBasketToDto() : userBasket?.MapBasketToDto()
             };
         }
 
@@ -62,12 +79,28 @@ namespace ReStore.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userBasket = await RetriveBasket(User.Identity.Name);
 
             return new UserDto
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Basket = userBasket?.MapBasketToDto()
             };
+        }
+
+        private async Task<Basket> RetriveBasket(string buyerId)
+        {
+            if (string.IsNullOrEmpty(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+
+            return await _context.Baskets
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
         }
     }
 }
