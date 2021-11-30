@@ -7,9 +7,11 @@ import Fade from '@mui/material/Fade';
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { signOut } from "../../features/account/accountSlice";
 import { clearBasket } from "../../features/basket/basketSlice";
+import { useNavigate } from "react-router";
 
 const SignedInMenu = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { user } = useAppSelector(state => state.account);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -40,6 +42,7 @@ const SignedInMenu = () => {
             <MenuItem onClick={() => {
                 dispatch(signOut());
                 dispatch(clearBasket());
+                navigate("/");
             }}>Logout</MenuItem>
         </Menu>
         </>

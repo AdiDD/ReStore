@@ -55,7 +55,6 @@ export const accountSlice = createSlice({
         signOut: state => {
             state.user = null;
             localStorage.removeItem("user");
-            window.location.href = "http://localhost:3000/";
         },
         setUser: (state, action) => {
             state.user = action.payload;
