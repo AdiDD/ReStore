@@ -27,5 +27,14 @@ namespace ReStore.Controllers
                 .Where(x => x.BuyerId == User.Identity.Name)
                 .ToListAsync();
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> GetOrder(int id)
+        {
+            return await _context.Orders
+                .Include(x => x.OrderItems)
+                .Where(x => x.BuyerId == User.Identity.Name && x.Id == id)
+                .FirstOrDefaultAsync();
+        }
     }
 }
