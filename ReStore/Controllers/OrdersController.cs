@@ -18,5 +18,14 @@ namespace ReStore.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Order>>> GetOrders()
+        {
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                .Where(x => x.BuyerId == User.Identity.Name)
+                .ToListAsync();
+        }
     }
 }
