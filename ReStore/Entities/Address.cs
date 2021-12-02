@@ -1,4 +1,4 @@
-﻿namespace ReStore.Extensions
+﻿namespace ReStore.Entities
 {
     public class Address
     {

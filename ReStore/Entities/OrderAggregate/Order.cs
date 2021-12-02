@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ReStore.Extensions.OrderAggregate
+namespace ReStore.Entities.OrderAggregate
 {
     public class Order
     {

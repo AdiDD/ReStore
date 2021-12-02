@@ -1,4 +1,4 @@
-﻿namespace ReStore.Extensions.OrderAggregate
+﻿namespace ReStore.Entities.OrderAggregate
 {
     public class OrderItem
     {

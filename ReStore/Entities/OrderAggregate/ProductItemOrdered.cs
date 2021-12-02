@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ReStore.Extensions.OrderAggregate
+namespace ReStore.Entities.OrderAggregate
 {
     [Owned]
     public class ProductItemOrdered
