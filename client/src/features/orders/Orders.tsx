@@ -10,8 +10,9 @@ import agent from '../../app/api/agent';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 import { Order } from '../../app/models/order';
 import { Button } from '@mui/material';
+import { currencyFormat } from '../../app/util/util';
 
-const Order = () => {
+const Orders = () => {
     const [orders, setOrders] = useState<Order[] | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -45,8 +46,8 @@ const Order = () => {
                     <TableCell component="th" scope="row">
                         {order.id}
                     </TableCell>
-                    <TableCell align="right">{order.total}</TableCell>
-                    <TableCell align="right">{order.orderDate}</TableCell>
+                    <TableCell align="right">{currencyFormat(order.total)}</TableCell>
+                    <TableCell align="right">{order.orderDate.split('T')[0]}</TableCell>
                     <TableCell align="right">{order.orderStatus}</TableCell>
                     <TableCell align="right">
                         <Button>View</Button>
@@ -59,4 +60,4 @@ const Order = () => {
     )
 }
 
-export default Order;
+export default Orders;
