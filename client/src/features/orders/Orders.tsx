@@ -11,10 +11,12 @@ import LoadingComponent from '../../app/layout/LoadingComponent';
 import { Order } from '../../app/models/order';
 import { Button } from '@mui/material';
 import { currencyFormat } from '../../app/util/util';
+import OrderDetails from './OrderDetails';
 
 const Orders = () => {
     const [orders, setOrders] = useState<Order[] | null>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedOrderNumber, setSelectedOrderNumber] = useState(0);
 
     useEffect(() => {
         agent.Orders.list()
@@ -24,6 +26,13 @@ const Orders = () => {
     }, []);
 
     if (loading) return <LoadingComponent message="Loading Orders..." />
+
+    if (selectedOrderNumber > 0) return (
+        <OrderDetails
+            order={orders?.find(order => order.id === selectedOrderNumber)!}
+            setSelectOrder={setSelectedOrderNumber} 
+        />
+    )
 
     return (
         <TableContainer component={Paper}>
@@ -50,7 +59,7 @@ const Orders = () => {
                     <TableCell align="center">{order.orderDate.split('T')[0]}</TableCell>
                     <TableCell align="center">{order.orderStatus}</TableCell>
                     <TableCell align="center">
-                        <Button>View</Button>
+                        <Button onClick={() => setSelectedOrderNumber(order.id)}> View </Button>
                     </TableCell>
                     </TableRow>
                 ))}
