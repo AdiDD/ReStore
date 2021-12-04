@@ -37,8 +37,6 @@ namespace ReStore.Services
                 };
 
                 intent = await service.CreateAsync(options);
-                basket.PaymentIntentId = intent.Id;
-                basket.ClientSecret = intent.ClientSecret;
             }
             else
             {
