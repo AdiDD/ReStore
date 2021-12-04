@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
@@ -21,6 +21,18 @@ const CheckoutPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    agent.Account.fetchAddress()
+      .then(response => {
+        if (response) {
+          setaddressFormValues(formValues => {
+            return {...formValues, ...response}
+          });
+          setDisableSaveAddress(true);
+        }
+      })
+  }, []);
 
   const handleNext = async () => {
     if (activeStep === 0 && !addressFormIsValid()) return;
@@ -62,6 +74,8 @@ const CheckoutPage = () => {
     setSaveAddress(saved => !saved)
   }
 
+  const [disableSaveAddres, setDisableSaveAddress] = useState(false);
+
   const [paymentFromValues, setPaymentFormValues] = useState({
     nameOnCard: "",
     cardNumber: "",
@@ -89,6 +103,7 @@ const CheckoutPage = () => {
   const handleAddressFormInputChange = (event: any) => {
     const { name, value } = event.target;
     setaddressFormValues({...addressFormValues, [name]: value});
+    setDisableSaveAddress(false);
   };
 
   const handlePaymentFormInputChange = (event: any) => {
@@ -99,7 +114,12 @@ const CheckoutPage = () => {
   function getStepContent(step: number) {
     switch (step) {
       case 0:
-        return <AddressForm handleInputChange={handleAddressFormInputChange} saveAddress={saveAddress} handleSaveAddress={handleSaveAddress} />;
+        return <AddressForm values={addressFormValues} 
+                handleInputChange={handleAddressFormInputChange} 
+                saveAddress={saveAddress} 
+                handleSaveAddress={handleSaveAddress}
+                disableSaveAddres={disableSaveAddres} 
+              />;
       case 1:
         return <Review />;
       case 2:

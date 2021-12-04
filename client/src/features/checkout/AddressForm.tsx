@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any) => {
+const AddressForm = ({ values, handleInputChange, saveAddress, handleSaveAddress, disableSaveAddres }: any) => {
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -20,6 +20,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="name"
             variant="standard"
+            value={values.fullName}
             onChange={handleInputChange}
           />
         </Grid>
@@ -32,6 +33,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="shipping address 1"
             variant="standard"
+            value={values.address1}
             onChange={handleInputChange}
           />
         </Grid>
@@ -43,6 +45,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="shipping address 2"
             variant="standard"
+            value={values.address2}
             onChange={handleInputChange}
           />
         </Grid>
@@ -55,6 +58,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="shipping address-level2"
             variant="standard"
+            value={values.city}
             onChange={handleInputChange}
           />
         </Grid>
@@ -65,6 +69,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             label="State/Province/Region"
             fullWidth
             variant="standard"
+            value={values.state}
             onChange={handleInputChange}
           />
         </Grid>
@@ -77,6 +82,7 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="shipping postal-code"
             variant="standard"
+            value={values.zip}
             onChange={handleInputChange}
           />
         </Grid>
@@ -89,13 +95,14 @@ const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any)
             fullWidth
             autoComplete="shipping country"
             variant="standard"
+            value={values.country}
             onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" checked={saveAddress} onChange={handleSaveAddress} />}
-            label="Use this address for payment details"
+            control={<Checkbox color="secondary" name="saveAddress" disabled={disableSaveAddres} checked={saveAddress} onChange={handleSaveAddress} />}
+            label="Save this as the default address"
           />
         </Grid>
       </Grid>
