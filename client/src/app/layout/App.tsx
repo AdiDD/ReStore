@@ -15,12 +15,12 @@ import ProductDetails from "../../features/catalog/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
 import BasketPage from "../../features/basket/BasketPage";
-import CheckoutPage from "../../features/checkout/CheckoutPage";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import PrivateRoute from "./PrivateRoute";
 import Orders from "../../features/orders/Orders";
+import CheckoutWrapper from "../../features/checkout/CheckoutWrapper";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -67,7 +67,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/basket" element={<BasketPage />} />
-            <Route path="/checkout" element={<PrivateRoute><CheckoutPage/></PrivateRoute>} />
+            <Route path="/checkout" element={<PrivateRoute><CheckoutWrapper /></PrivateRoute>} />
             <Route path="/orders" element={<PrivateRoute><Orders/></PrivateRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
