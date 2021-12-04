@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -10,16 +9,38 @@ import Typography from '@mui/material/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import agent from '../../app/api/agent';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { clearBasket } from '../basket/basketSlice';
+import { LoadingButton } from '@mui/lab';
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
 const CheckoutPage = () => {
+  const dispatch = useAppDispatch()
   const [activeStep, setActiveStep] = useState(0);
+  const [orderNumber, setOrderNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (activeStep === 0 && !addressFormIsValid()) return;
     if (activeStep === 2 && !paymentFormIsValid()) return;
-    setActiveStep(activeStep + 1);
+
+    if (activeStep === steps.length - 1) {
+      setLoading(true);
+      try {
+        const orderNumber = await agent.Orders.create({ saveAddress, shippingAddress: addressFormValues,  });
+        setOrderNumber(orderNumber);
+        setActiveStep(activeStep + 1);
+        dispatch(clearBasket());
+      } catch(error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -33,8 +54,13 @@ const CheckoutPage = () => {
     city: "",
     state: "",
     zip: "",
-    country: ""
+    country: "",
   });
+
+  const [saveAddress, setSaveAddress] = useState(false);
+  const handleSaveAddress = () => {
+    setSaveAddress(saved => !saved)
+  }
 
   const [paymentFromValues, setPaymentFormValues] = useState({
     nameOnCard: "",
@@ -73,7 +99,7 @@ const CheckoutPage = () => {
   function getStepContent(step: number) {
     switch (step) {
       case 0:
-        return <AddressForm handleInputChange={handleAddressFormInputChange} />;
+        return <AddressForm handleInputChange={handleAddressFormInputChange} saveAddress={saveAddress} handleSaveAddress={handleSaveAddress} />;
       case 1:
         return <Review />;
       case 2:
@@ -103,7 +129,7 @@ const CheckoutPage = () => {
                     Thank you for your order.
                     </Typography>
                     <Typography variant="subtitle1">
-                    Your order number is #2001539. We have emailed your order
+                    Your order number is #{orderNumber}. We have emailed your order
                     confirmation, and will send you an update when your order has
                     shipped.
                     </Typography>
@@ -117,13 +143,14 @@ const CheckoutPage = () => {
                         Back
                         </Button>
                     )}
-                    <Button
+                    <LoadingButton
+                        loading={loading}
                         variant="contained"
                         onClick={handleNext}
                         sx={{ mt: 3, ml: 1 }}
                     >
                         {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                    </Button>
+                    </LoadingButton>
                     </Box>
                 </>
                 )}

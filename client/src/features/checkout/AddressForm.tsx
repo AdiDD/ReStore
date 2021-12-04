@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-const AddressForm = ({ handleInputChange }: any) => {
+const AddressForm = ({ handleInputChange, saveAddress, handleSaveAddress }: any) => {
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -94,7 +94,7 @@ const AddressForm = ({ handleInputChange }: any) => {
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+            control={<Checkbox color="secondary" name="saveAddress" checked={saveAddress} onChange={handleSaveAddress} />}
             label="Use this address for payment details"
           />
         </Grid>
