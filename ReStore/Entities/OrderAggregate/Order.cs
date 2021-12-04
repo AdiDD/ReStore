@@ -13,6 +13,7 @@ namespace ReStore.Entities.OrderAggregate
         public long Subtotal { get; set; }
         public long DeliveryFee { get; set; }
         public OrderStatus OrderStatus { get; set; } = OrderStatus.PENDING;
+        public string PaymentIntentId { get; set; }
         public long Total => Subtotal + DeliveryFee;
     }
 }
