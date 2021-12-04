@@ -12,6 +12,7 @@ import { Order } from '../../app/models/order';
 import { Button } from '@mui/material';
 import { currencyFormat } from '../../app/util/util';
 import OrderDetails from './OrderDetails';
+import PreviewIcon from '@mui/icons-material/Preview';
 
 const Orders = () => {
     const [orders, setOrders] = useState<Order[] | null>(null);
@@ -43,7 +44,7 @@ const Orders = () => {
                     <TableCell align="center">Total</TableCell>
                     <TableCell align="center">Order date</TableCell>
                     <TableCell align="center">Order status</TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="center"> <PreviewIcon /> </TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
