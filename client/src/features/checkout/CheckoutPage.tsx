@@ -13,6 +13,7 @@ import agent from '../../app/api/agent';
 import { useAppDispatch } from '../../app/store/configureStore';
 import { clearBasket } from '../basket/basketSlice';
 import { LoadingButton } from '@mui/lab';
+import { StripeElementType } from '@stripe/stripe-js'
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
@@ -21,12 +22,31 @@ const CheckoutPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [formValues, setFormValues] = useState({
+    fullName: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+    nameOnCard: ""
+  });
+  const [saveAddress, setSaveAddress] = useState(false);
+  const [disableSaveAddres, setDisableSaveAddress] = useState(false);
+  const [cardState, setCardState] = useState<{elementError: {[key in StripeElementType]?: string}}>({elementError: {}});
+
+  const [cardComplete, setCardComplete] = useState<any>({
+    cardNumber: false,
+    cardExpiry: false,
+    cardCvc: false
+  });
 
   useEffect(() => {
     agent.Account.fetchAddress()
       .then(response => {
         if (response) {
-          setaddressFormValues(formValues => {
+          setFormValues(formValues => {
             return {...formValues, ...response}
           });
           setDisableSaveAddress(true);
@@ -35,13 +55,10 @@ const CheckoutPage = () => {
   }, []);
 
   const handleNext = async () => {
-    if (activeStep === 0 && !addressFormIsValid()) return;
-    if (activeStep === 2 && !paymentFormIsValid()) return;
-
     if (activeStep === steps.length - 1) {
       setLoading(true);
       try {
-        const orderNumber = await agent.Orders.create({ saveAddress, shippingAddress: addressFormValues,  });
+        const orderNumber = await agent.Orders.create({ saveAddress, shippingAddress: formValues,  });
         setOrderNumber(orderNumber);
         setActiveStep(activeStep + 1);
         dispatch(clearBasket());
@@ -59,63 +76,59 @@ const CheckoutPage = () => {
     setActiveStep(activeStep - 1);
   };
 
-  const [addressFormValues, setaddressFormValues] = useState({
-    fullName: "",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-  });
-
-  const [saveAddress, setSaveAddress] = useState(false);
   const handleSaveAddress = () => {
     setSaveAddress(saved => !saved)
   }
 
-  const [disableSaveAddres, setDisableSaveAddress] = useState(false);
-
-  const [paymentFromValues, setPaymentFormValues] = useState({
-    nameOnCard: "",
-    cardNumber: "",
-    expDate: "",
-    cvv: ""
-  });
 
   const addressFormIsValid = () => {
-    return addressFormValues.fullName.length > 0 && 
-      addressFormValues.address1.length > 0 && 
-      addressFormValues.address2.length > 0 && 
-      addressFormValues.city.length > 0 && 
-      addressFormValues.state.length > 0 && 
-      addressFormValues.zip.length > 0 && 
-      addressFormValues.country.length > 0;
+    return formValues.fullName.length > 0 && 
+      formValues.address1.length > 0 && 
+      formValues.address2.length > 0 && 
+      formValues.city.length > 0 && 
+      formValues.state.length > 0 && 
+      formValues.zip.length > 0 && 
+      formValues.country.length > 0;
   }
 
   const paymentFormIsValid = () => {
-    return paymentFromValues.nameOnCard.length > 0 && 
-    paymentFromValues.cardNumber.length > 0 && 
-    paymentFromValues.expDate.length > 0 && 
-    paymentFromValues.cvv.length > 0;
+    return cardComplete.cardNumber && cardComplete.cardExpiry && cardComplete.cardCvc && formValues.nameOnCard.trim().length > 0;
   }
 
-  const handleAddressFormInputChange = (event: any) => {
+  const handleFormInputChange = (event: any) => {
     const { name, value } = event.target;
-    setaddressFormValues({...addressFormValues, [name]: value});
+    setFormValues({...formValues, [name]: value});
     setDisableSaveAddress(false);
   };
 
-  const handlePaymentFormInputChange = (event: any) => {
-    const { name, value } = event.target;
-    setPaymentFormValues({...paymentFromValues, [name]: value});
-  };
+  const onCardInputChange = (event: any) => {
+    setCardState({
+      ...cardState,
+      elementError: {
+        ...cardState.elementError,
+        [event.elementType]: event.error?.message
+      }
+    });
+
+    setCardComplete({
+      ...cardComplete,
+      [event.elementType]: event.complete
+    })
+  }
+
+  const submitDisabled = (): boolean => {
+    if (activeStep === steps.length - 1) {
+      return !paymentFormIsValid();
+    } else {
+      return !addressFormIsValid();
+    }
+  }
 
   function getStepContent(step: number) {
     switch (step) {
       case 0:
-        return <AddressForm values={addressFormValues} 
-                handleInputChange={handleAddressFormInputChange} 
+        return <AddressForm values={formValues} 
+                handleInputChange={handleFormInputChange} 
                 saveAddress={saveAddress} 
                 handleSaveAddress={handleSaveAddress}
                 disableSaveAddres={disableSaveAddres} 
@@ -123,7 +136,7 @@ const CheckoutPage = () => {
       case 1:
         return <Review />;
       case 2:
-        return <PaymentForm handleInputChange={handlePaymentFormInputChange} />;      
+        return <PaymentForm cardState={cardState} onCardInputChange={onCardInputChange} handleNameInputChange={handleFormInputChange} />;      
       default:
         throw new Error('Unknown step');
     }
@@ -164,6 +177,7 @@ const CheckoutPage = () => {
                         </Button>
                     )}
                     <LoadingButton
+                        disabled={submitDisabled()}
                         loading={loading}
                         variant="contained"
                         onClick={handleNext}
