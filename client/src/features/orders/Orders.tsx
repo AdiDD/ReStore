@@ -30,11 +30,11 @@ const Orders = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                 <TableRow>
-                    <TableCell>Order number</TableCell>
-                    <TableCell align="right">Total</TableCell>
-                    <TableCell align="right">Order date</TableCell>
-                    <TableCell align="right">Order status</TableCell>
-                    <TableCell align="right"></TableCell>
+                    <TableCell align="center">Order number</TableCell>
+                    <TableCell align="center">Total</TableCell>
+                    <TableCell align="center">Order date</TableCell>
+                    <TableCell align="center">Order status</TableCell>
+                    <TableCell align="center"></TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
@@ -43,13 +43,13 @@ const Orders = () => {
                     key={order.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                    <TableCell component="th" scope="row">
+                    <TableCell align="center" component="th" scope="row">
                         {order.id}
                     </TableCell>
-                    <TableCell align="right">{currencyFormat(order.total)}</TableCell>
-                    <TableCell align="right">{order.orderDate.split('T')[0]}</TableCell>
-                    <TableCell align="right">{order.orderStatus}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">{currencyFormat(order.total)}</TableCell>
+                    <TableCell align="center">{order.orderDate.split('T')[0]}</TableCell>
+                    <TableCell align="center">{order.orderStatus}</TableCell>
+                    <TableCell align="center">
                         <Button>View</Button>
                     </TableCell>
                     </TableRow>
