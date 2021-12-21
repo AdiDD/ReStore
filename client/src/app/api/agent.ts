@@ -48,26 +48,31 @@ const Basket = {
     get: () => requests.get('basket'),
     addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
     removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
-}
+};
 
 const Account = {
     login: (values: any) => requests.post("account/login", values),
     register: (values: any) => requests.post("account/register", values),
     currentUser: () => requests.get("account/currentUser"),
     fetchAddress: () => requests.get("account/savedAddress")
-}
+};
 
 const Orders = {
     list: () => requests.get("orders"),
     fetch: (id: number) => requests.get(`orders/${id}`),
     create: (values: any) => requests.post("orders", values)
+};
+
+const Payments = {
+    createPaymentIntent: () => requests.post("payments", {})
 }
 
 const agent = {
     Catalog,
     Basket,
     Account,
-    Orders
+    Orders,
+    Payments
 };
 
 export default agent;
