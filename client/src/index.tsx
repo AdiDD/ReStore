@@ -8,6 +8,8 @@ import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 
 import './app/layout/styles.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 ReactDOM.render(
   <React.StrictMode>

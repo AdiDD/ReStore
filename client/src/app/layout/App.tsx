@@ -59,9 +59,11 @@ function App() {
         <ToastContainer theme="colored" position="bottom-right" hideProgressBar />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-        <Container>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+        <Container sx={{ mt: 8 }}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/catalog/:id" element={<ProductDetails />} />
             <Route path="/about" element={<AboutPage />} />
