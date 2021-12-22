@@ -15,13 +15,13 @@ export default function HomePage() {
         <div style={{maxWidth: '100%', margin: 0, padding: 0, overflowX: 'hidden'}}>
             <Slider {...settings}>
                 <div>
-                    <img src="/images/hero1.jpg" alt="hero image" style={{display: 'block', width: '100%', maxHeight: 500}} />
+                    <img src="/images/hero1.jpg" alt="hero" style={{display: 'block', width: '100%', maxHeight: 500}} />
                 </div>
                 <div>
-                    <img src="/images/hero2.jpg" alt="hero image" style={{display: 'block', width: '100%', maxHeight: 500}} />
+                    <img src="/images/hero2.jpg" alt="hero" style={{display: 'block', width: '100%', maxHeight: 500}} />
                 </div>
                 <div>
-                    <img src="/images/hero3.jpg" alt="hero image" style={{display: 'block', width: '100%', maxHeight: 500}} />
+                    <img src="/images/hero3.jpg" alt="hero" style={{display: 'block', width: '100%', maxHeight: 500}} />
                 </div>
             </Slider>
 
