@@ -67,7 +67,7 @@ export const accountSlice = createSlice({
         builder.addCase(fetchCurrentUser.rejected, state => {
             state.user = null;
             localStorage.removeItem("user");
-            window.location.href = process.env.APP_API_URL!;
+            window.location.href = process.env.REACT_APP_API_URL!;
             toast.error("Session expired. Please log in again");
         });
         builder.addCase(signInUser.fulfilled, (state, action) => {

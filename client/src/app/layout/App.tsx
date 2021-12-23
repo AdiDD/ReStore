@@ -59,22 +59,18 @@ function App() {
         <ToastContainer theme="colored" position="bottom-right" hideProgressBar />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-        <Container sx={{ mt: 8 }}>
           <Routes>
-            <Route path="/catalog" element={<Catalog />} />
-            <Route path="/catalog/:id" element={<ProductDetails />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/catalog" element={<Container><Catalog /></Container>} />
+            <Route path="/catalog/:id" element={<Container><ProductDetails /></Container>} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/basket" element={<BasketPage />} />
-            <Route path="/checkout" element={<PrivateRoute><CheckoutWrapper /></PrivateRoute>} />
-            <Route path="/orders" element={<PrivateRoute><Orders/></PrivateRoute>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/basket" element={<Container><BasketPage /></Container>} />
+            <Route path="/checkout" element={<Container><PrivateRoute><CheckoutWrapper /></PrivateRoute></Container>} />
+            <Route path="/orders" element={<Container><PrivateRoute><Orders/></PrivateRoute></Container>} />
+            <Route path="/login" element={<Container><Login /></Container>} />
+            <Route path="/register" element={<Container><Register /></Container>} />
           </Routes>
-        </Container>
       </ThemeProvider>
   );
 }
