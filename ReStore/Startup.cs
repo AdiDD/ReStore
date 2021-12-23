@@ -36,7 +36,7 @@ namespace ReStore
             });
             services.AddDbContext<StoreContext>(options => 
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddCors();
 
