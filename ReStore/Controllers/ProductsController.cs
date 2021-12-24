@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReStore.Data;
+using ReStore.DTOs;
 using ReStore.Entities;
 using ReStore.Extensions;
 using ReStore.RequestHelpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ReStore.Controllers
@@ -14,10 +16,12 @@ namespace ReStore.Controllers
     public class ProductsController : BaseApiController
     {
         private readonly StoreContext _context;
+        private readonly IMapper _mapper;
 
-        public ProductsController(StoreContext context)
+        public ProductsController(StoreContext context, IMapper mapper)
         {
             this._context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -36,7 +40,7 @@ namespace ReStore.Controllers
             return products;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -53,6 +57,18 @@ namespace ReStore.Controllers
             var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
 
             return Ok(new { brands, types });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
+        {
+            var product = _mapper.Map<Product>(productDto);
+            _context.Products.Add(product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result) return CreatedAtRoute("GetProduct", new { Id = product.Id }, product);
+            return BadRequest(new ProblemDetails { Title = "Problem creating new product" });
         }
     }
 }
