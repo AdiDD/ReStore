@@ -7,6 +7,7 @@ using ReStore.DTOs;
 using ReStore.Entities;
 using ReStore.Extensions;
 using ReStore.RequestHelpers;
+using ReStore.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,13 @@ namespace ReStore.Controllers
     {
         private readonly StoreContext _context;
         private readonly IMapper _mapper;
+        private readonly ImageService _imageService;
 
-        public ProductsController(StoreContext context, IMapper mapper)
+        public ProductsController(StoreContext context, IMapper mapper, ImageService imageService)
         {
             this._context = context;
             _mapper = mapper;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -61,11 +64,22 @@ namespace ReStore.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
+        public async Task<ActionResult<Product>> CreateProduct([FromForm]CreateProductDto productDto)
         {
             // Create new product with AutoMapper
             var product = _mapper.Map<Product>(productDto);
             _context.Products.Add(product);
+
+            if (productDto.File != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(productDto.File);
+
+                if (imageResult.Error != null) 
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+                product.PictureUrl = imageResult.SecureUrl.ToString();
+                product.PublicId = imageResult.PublicId;
+            }
 
             var result = await _context.SaveChangesAsync() > 0;
             if (result) return CreatedAtRoute("GetProduct", new { Id = product.Id }, product);
