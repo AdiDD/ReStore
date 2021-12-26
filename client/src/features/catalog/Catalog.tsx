@@ -1,12 +1,11 @@
 import { Grid, Paper, FormLabel } from "@mui/material";
-import { useEffect } from "react";
 import AppPagination from "../../app/components/AppPagination";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchFiltersAsync, fetchProductsAsync, productSelectors, setPageNumber, setProductParams } from "./catalogSlice";
-
+import { setPageNumber, setProductParams } from "./catalogSlice";
+import useProducts from "../../app/hooks/useProducts";
 import ProductList from "./ProductList";
 import ProductSearch from "./ProductSearch";
 
@@ -17,20 +16,9 @@ const orderByOptions = [
 ];
 
 const Catalog = () => {
-    const products = useAppSelector(productSelectors.selectAll);
-    const { productsLoaded, filtersLoaded, brands, types, productParams, metaData } = useAppSelector(state => state.catalog);
+    const { products, brands, types, filtersLoaded, productsLoaded, metaData } = useProducts();
+    const { productParams } = useAppSelector(state => state.catalog);
     const dispatch = useAppDispatch();
-
-    // i used two useEffect twice to avoid double loading of products because filters were loading faster than products and the page would rerender and then the component would
-    // fetch the products again.
-
-    useEffect(() => {
-      if (!productsLoaded) dispatch(fetchProductsAsync());
-    }, [productsLoaded, dispatch])
-
-    useEffect(() => {
-      if (!filtersLoaded) dispatch(fetchFiltersAsync());
-    }, [filtersLoaded, dispatch])
 
     if ((!productsLoaded || !filtersLoaded) || !metaData) return <LoadingComponent message="Loading Products..." />
 
