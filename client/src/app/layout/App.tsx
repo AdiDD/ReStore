@@ -69,7 +69,7 @@ function App() {
             <Route path="/basket" element={<Container><BasketPage /></Container>} />
             <Route path="/checkout" element={<Container><PrivateRoute><CheckoutWrapper /></PrivateRoute></Container>} />
             <Route path="/orders" element={<Container><PrivateRoute><Orders/></PrivateRoute></Container>} />
-            <Route path="/inventory" element={<Container><PrivateRoute><Inventory/></PrivateRoute></Container>} />
+            <Route path="/inventory" element={<Container><PrivateRoute roles={["Admin"]} ><Inventory/></PrivateRoute></Container>} />
             <Route path="/login" element={<Container><Login /></Container>} />
             <Route path="/register" element={<Container><Register /></Container>} />
           </Routes>
