@@ -1,6 +1,8 @@
 ﻿
 <div id="top"></div>
 
+# Project is deployed to heroku. Click [here][deploy-link] to view the live demo.
+
 # ReStore Shop
 
 <!-- TABLE OF CONTENTS -->
@@ -99,13 +101,14 @@ Run the project with IIS Express.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-This project is made by following a [udemy course][course] on Udemy. 
+This project is made by following a [course][course] on Udemy. 
 
 <p align="right"><a href="#top">Top ↑</a></p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
 [course]: https://www.udemy.com/course/learn-to-build-an-e-commerce-store-with-dotnet-react-redux/
+[deploy-link]: https://adi-react-store.herokuapp.com/https://adi-react-store.herokuapp.com/
 
 [asp-net-core]: https://dotnet.microsoft.com/en-us/learn/aspnet/what-is-aspnet-core
 [ef-core]: https://docs.microsoft.com/en-us/ef/core/
