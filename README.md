@@ -99,13 +99,13 @@ Run the project with IIS Express.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-This project is made by following a [udemy-course][course] on Udemy. 
+This project is made by following a [udemy course][course] on Udemy. 
 
 <p align="right"><a href="#top">Top ↑</a></p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[udemy-course]: https://www.udemy.com/course/learn-to-build-an-e-commerce-store-with-dotnet-react-redux/
+[course]: https://www.udemy.com/course/learn-to-build-an-e-commerce-store-with-dotnet-react-redux/
 
 [asp-net-core]: https://dotnet.microsoft.com/en-us/learn/aspnet/what-is-aspnet-core
 [ef-core]: https://docs.microsoft.com/en-us/ef/core/
