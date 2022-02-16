@@ -108,7 +108,7 @@ This project is made by following a [course][course] on Udemy.
 <!-- MARKDOWN LINKS & IMAGES -->
 
 [course]: https://www.udemy.com/course/learn-to-build-an-e-commerce-store-with-dotnet-react-redux/
-[deploy-link]: https://adi-react-store.herokuapp.com/https://adi-react-store.herokuapp.com/
+[deploy-link]: https://adi-react-store.herokuapp.com
 
 [asp-net-core]: https://dotnet.microsoft.com/en-us/learn/aspnet/what-is-aspnet-core
 [ef-core]: https://docs.microsoft.com/en-us/ef/core/
